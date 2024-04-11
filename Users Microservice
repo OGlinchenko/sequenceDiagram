@@ -1,0 +1,3 @@
+cd Users
+npm init -y  # Initialize npm project
+npm install express body-parser  # Install required libraries
