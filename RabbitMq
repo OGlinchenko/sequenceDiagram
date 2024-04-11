@@ -1,0 +1,23 @@
+const amqp = require('amqplib');
+
+async function publish() {
+  const connection = await amqp.connect('amqp://user:password@localhost:5672');
+  const channel = await connection.createChannel();
+
+  const exchangeName = 'my-exchange'; // Replace with your exchange name
+  const routingKey = 'my-routing-key'; // Replace with your routing key
+  const message = 'Привіт із RabbitMq!';
+
+  await channel.assertExchange(exchangeName, 'fanout', { durable: false });
+  channel.sendToQueue(exchangeName, routingKey, Buffer.from(message));
+
+  console.log('Message published!');
+  
+  setTimeout(() => {
+    connection.close(); // Close connection after a timeout
+  }, 5000);
+}
+
+publish().catch(error => {
+  console.error(error);
+});
